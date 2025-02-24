@@ -1,0 +1,47 @@
+# RETRO GAMING
+
+services:
+  # ----------------------------------------
+  # EMULATORJS
+  # Retro gaming
+  # ----------------------------------------
+  emulatorjs:
+    image: lscr.io/linuxserver/emulatorjs:latest
+    container_name: emulatorjs
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+    networks:
+      - traefik_proxy
+    ports:
+      - 4000:80
+      - 4010:3000
+    volumes:
+      - ../docker/volumes/arcade/emulatorjs/config:/config
+      - ../docker/volumes/arcade/emulatorjs/data:/data
+    labels:
+      traefik.enable: true
+
+      traefik.http.services.svc-emulatorjs.loadbalancer.server.port: 80
+      traefik.http.services.svc-emulatorjs-manager.loadbalancer.server.port: 3000
+
+      traefik.http.routers.emulatorjs.service: svc-emulatorjs
+      traefik.http.routers.emulatorjs.rule: Host(`arcade.${DOMAIN}`)
+      traefik.http.routers.emulatorjs.entrypoints: websecure
+      traefik.http.routers.emulatorjs.tls.certresolver: myresolver
+      traefik.http.routers.emulatorjs.middlewares: authentik-auth
+
+
+      traefik.http.routers.emulatorjs-manager.service: svc-emulatorjs-manager
+      traefik.http.routers.emulatorjs-manager.rule: Host(`arcade-manager.${DOMAIN}`)
+      traefik.http.routers.emulatorjs-manager.entrypoints: websecure
+      traefik.http.routers.emulatorjs-manager.tls.certresolver: myresolver
+      traefik.http.routers.emulatorjs-manager.middlewares: authentik-auth
+
+    restart: unless-stopped
+
+
+networks:
+  traefik_proxy:
+    external: true

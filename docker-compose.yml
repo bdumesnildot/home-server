@@ -1,0 +1,9 @@
+networks:
+  traefik_proxy:
+    external: true
+
+include:
+- ./auth/docker-compose.yml
+- ./traefik/docker-compose.yml
+- ./htpc/docker-compose.yml
+- ./arcade/docker-compose.yml
