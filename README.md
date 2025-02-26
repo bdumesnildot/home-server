@@ -2,21 +2,21 @@
 
 This home server setup provides a collection of self-hosted services for media streaming, authentication, and emulation. It uses **Docker Compose** to manage and deploy the services efficiently.
 
-### TRAEFIK
+### TRAEFIK 🚦
 
-#### Services Included 📋
+#### Services Included
 - **[Traefik](https://traefik.io/)**: Reverse proxy with SSL support for managing and securing your web services.
 
 
-### AUTH
+### AUTH 🔐
 
-#### Services Included 📋
+#### Services Included
 - **[Authentik](https://goauthentik.io/)**: IdP (Identity Provider) and SSO (single sign on)
 
 
-### HTPC
+### HTPC 🎬
 
-#### Services Included 📋
+#### Services Included
 - **[Plex Media Server](https://www.plex.tv/)**: Manage and serve media files to Plex clients.
 - **[Gluetun](https://github.com/qdm12/gluetun)**: VPN client supporting multiple VPN service providers for secure connections.
 - **[qBittorrent](https://www.qbittorrent.org/)**: Torrent client for downloading and managing torrent files.
@@ -26,7 +26,7 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Radarr](https://radarr.video/)**: Automated movie management.
 
 
-#### Disclaimer ❗️
+#### Disclaimer ⚠️
 
 **Responsibility**: By using this setup, you acknowledge and agree that you are solely responsible for:
 
@@ -39,7 +39,7 @@ This home server setup provides a collection of self-hosted services for media s
 Use this setup responsibly and at your own risk.
 
 
-### ARCADE
-#### Services Included 📋
+### ARCADE 🕹️
+#### Services Included
 - **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
 
