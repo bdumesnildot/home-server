@@ -1,10 +1,15 @@
-# ENVIRONMENT
+# -- ENVIRONMENT
 .env
+# sym link
+!/arcade/.env
+!/auth/.env
+!/htpc/.env
+!/traefik/.env
 
-# LOCAL SETTINGS
+# -- LOCAL SETTINGS
 .vscode
 
-# DOCKER VOLUMES
+# -- DOCKER VOLUMES
 docker/volumes/*
 !docker/volumes/.keep
 
