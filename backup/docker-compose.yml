@@ -1,0 +1,38 @@
+# BACKUP
+
+services:
+  # ----------------------------------------
+  # DUPLICATI
+  # Backup services
+  # ----------------------------------------
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
+      - CLI_ARGS=${DUPLICATI_CLI_ARGS}
+      - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD}
+    networks:
+      - traefik_proxy
+    ports:
+      - 8200:8200
+    volumes:
+      - ../docker/volumes/duplicati/config:/config
+      - /mnt/hdd500:/backups
+      - ../:/source
+    labels:
+      traefik.enable: true
+      traefik.http.routers.duplicati.rule: Host(`backup.${DOMAIN}`)
+      traefik.http.routers.duplicati.entrypoints: websecure
+      traefik.http.routers.duplicati.tls.certresolver: myresolver
+      traefik.http.routers.duplicati.middlewares: authentik-auth
+    restart: unless-stopped
+
+
+
+networks:
+  traefik_proxy:
+    external: true
