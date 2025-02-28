@@ -4,6 +4,9 @@ services:
   # ----------------------------------------
   # PROWLARR
   # Index management
+  #
+  # FLARESOLVER
+  # a proxy server to bypass Cloudflare and DDoS-GUARD protection
   # ----------------------------------------
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -14,16 +17,37 @@ services:
       - PGID=${PGID}
     networks:
       - traefik_proxy
+      - prowlarr
     ports:
       - 9696:9696
     volumes:
       - ../docker/volumes/htpc/prowlarr:/config
     labels:
       traefik.enable: true
+      traefik.docker.network: traefik_proxy
+
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.${DOMAIN}`)
       traefik.http.routers.prowlarr.entrypoints: websecure
       traefik.http.routers.prowlarr.tls.certresolver: myresolver
       traefik.http.routers.prowlarr.middlewares: authentik-auth
+    restart: unless-stopped
+
+
+  flaresolverr:
+    # DockerHub mirror flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - LOG_LEVEL=info
+      - LOG_HTML=${FLARESOLVER_LOG_HTML}
+      - CAPTCHA_SOLVER=${FLARESOLVER_CAPTCHA_SOLVER}
+    networks:
+      - prowlarr
+    ports:
+      - 8191:8191
     restart: unless-stopped
 
 
@@ -127,3 +151,4 @@ services:
 networks:
   traefik_proxy:
     external: true
+  prowlarr:
