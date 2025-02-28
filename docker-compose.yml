@@ -5,5 +5,6 @@ networks:
 include:
 - ./auth/docker-compose.yml
 - ./traefik/docker-compose.yml
+- ./downloader/docker-compose.yml
 - ./htpc/docker-compose.yml
 - ./arcade/docker-compose.yml

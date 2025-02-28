@@ -3,8 +3,10 @@
 # sym link
 !/arcade/.env
 !/auth/.env
+!/downloader/.env
 !/htpc/.env
 !/traefik/.env
+!/vpn/.env
 
 # -- LOCAL SETTINGS
 .vscode
