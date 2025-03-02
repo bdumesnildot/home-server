@@ -13,29 +13,32 @@ services:
       - CF_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
     networks:
       - traefik_proxy
+      - socket_proxy
     ports:
       - 80:80
       - 443:443
       - 8080:8080
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../docker/volumes/traefik/letsencrypt:/letsencrypt
     command:
-      - "--api.insecure=true"
-      - "--log.level=DEBUG"
+      - --api.insecure=true
+      - --log.level=DEBUG
       ## -- providers
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
       ## -- entrypoints
-      - "--entryPoints.web.address=:80"
-      - "--entryPoints.websecure.address=:443"
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
       ## -- tls certificates 
-      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
-      - "--certificatesresolvers.myresolver.acme.storage=letsencrypt/acme.json"
-      - "--certificatesresolvers.myresolver.acme.dnschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare"
+      - --certificatesresolvers.myresolver.acme.email=${EMAIL}
+      - --certificatesresolvers.myresolver.acme.storage=letsencrypt/acme.json
+      - --certificatesresolvers.myresolver.acme.dnschallenge=true
+      - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
     labels:
       traefik.enable: true
+      traefik.docker.network: traefik_proxy
+
       ## -- Router dashboard
       traefik.http.routers.traefik-dashboard.service: api@internal
       traefik.http.routers.traefik-dashboard.rule: Host(`traefik.${DOMAIN}`)
@@ -73,4 +76,6 @@ services:
 
 networks:
   traefik_proxy:
+    external: true
+  socket_proxy:
     external: true

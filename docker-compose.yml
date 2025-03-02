@@ -1,12 +1,15 @@
 networks:
   traefik_proxy:
     external: true
+  socket_proxy:
+    external: true
 
 include:
+- ./arcade/docker-compose.yml
 - ./auth/docker-compose.yml
-- ./traefik/docker-compose.yml
+- ./backup/docker-compose.yml
+- ./docker/docker-compose.yml
 - ./downloader/docker-compose.yml
 - ./htpc/docker-compose.yml
-- ./arcade/docker-compose.yml
 - ./management/docker-compose.yml
-- ./backup/docker-compose.yml
+- ./traefik/docker-compose.yml
