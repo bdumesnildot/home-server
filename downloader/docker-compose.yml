@@ -21,8 +21,8 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 8888:8888 # qbittorrent
-      - 6789:6789 # nzbget
+      - ${QBITTORRENT_PORT}:8888 # qbittorrent
+      - ${NZBGET_PORT}:6789 # nzbget
     volumes:
       - ../docker/volumes/htpc/gluetun:/gluetun
     devices:
@@ -58,7 +58,7 @@ services:
       - TZ=${TZ}
       - PUID=${PUID}
       - PGID=${PUID}
-      - WEBUI_PORT=8888
+      - WEBUI_PORT=${QBITTORRENT_PORT}
     network_mode: 'service:gluetun' # see gluetun for traefik routing
     volumes:
       - ../docker/volumes/htpc/qbittorrent:/config

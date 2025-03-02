@@ -19,7 +19,7 @@ services:
       - traefik_proxy
       - prowlarr
     ports:
-      - 9696:9696
+      - ${PROWLARR_PORT}:9696
     volumes:
       - ../docker/volumes/htpc/prowlarr:/config
     labels:
@@ -47,7 +47,7 @@ services:
     networks:
       - prowlarr
     ports:
-      - 8191:8191
+      - ${PROWLARR_FLARESOLVER_PORT}:8191
     restart: unless-stopped
 
 
@@ -65,7 +65,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 8989:8989
+      - ${SONARR_PORT}:8989
     volumes:
       - ../docker/volumes/htpc/sonarr:/config
       - ${MEDIA_PATH}/media/series:/tv
@@ -93,7 +93,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 7878:7878
+      - ${RADARR_PORT}:7878
     volumes:
       - ../docker/volumes/htpc/radarr:/config
       - ${MEDIA_PATH}/media/movies:/movies
@@ -123,7 +123,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 32400:32400/tcp
+      - ${PLEX_PORT}:32400/tcp
       - 8324:8324/tcp
       - 32469:32469/tcp
       - 1900:1900/udp
@@ -142,7 +142,7 @@ services:
       traefik.http.routers.plex.rule: Host(`plex.${DOMAIN}`)
       traefik.http.routers.plex.entrypoints: websecure
       traefik.http.routers.plex.tls.certresolver: myresolver
-      traefik.http.services.plex.loadbalancer.server.port: 3240
+      traefik.http.services.plex.loadbalancer.server.port: 32400
       traefik.http.routers.plex.middlewares: authentik-auth
 
     restart: unless-stopped

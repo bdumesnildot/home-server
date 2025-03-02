@@ -14,11 +14,10 @@ services:
       - socket_proxy
       - traefik_proxy
     ports:
-      - 9050:9000
-      - 9051:9443
+      - ${PORTAINER_PORT}:9000
     volumes:
       - ../docker/volumes/portainer/data:/data
-    command: -H tcp://socket-proxy:2375
+    command: -H tcp://socket-proxy:${SOCKET_PROXY_PORT}
     security_opt:
       - no-new-privileges:true
     labels:

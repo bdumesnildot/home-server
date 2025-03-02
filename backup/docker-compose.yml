@@ -18,7 +18,7 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 8200:8200
+      - ${DUPLICATI_PORT}:8200
     volumes:
       - ../docker/volumes/duplicati/config:/config
       - /mnt/hdd500:/backups
