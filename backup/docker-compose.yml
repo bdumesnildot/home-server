@@ -1,17 +1,65 @@
 # BACKUP
 
+volumes:
+  # -- admin
+  server_admin_portainer_data:
+    external: true
+  # -- auth
+  # -- backup
+  server_backup_docker_volume_backup:
+    external: true
+  server_backup_duplicati_config:
+    external: true
+  # -- downloader
+  # -- htpc
+  # -- metrics
+  # -- traefik
+
+networks:
+  traefik_proxy:
+    external: true
+  socket_proxy:
+    external: true
+
 services:
   # ----------------------------------------
+  # DOCKER VOLUME BACKUP
+  # Backup Docker volumes locally or to compatible storage
+  # ----------------------------------------
+  docker-volume-backup:
+    image: offen/docker-volume-backup:latest
+    container_name: docker-volume-backup
+    # user: ${PUID}:${PGID}
+    user: 1010:1010
+    environment:
+      - GPG_PASSPHRASE=${GPG_PASSPHRASE}
+      - NOTIFICATION_URLS=${BACKUP_BACKUP_NOTIFICATION_URLS}
+      - NOTIFICATION_LEVEL=error
+      - DOCKER_HOST=tcp://socket-proxy:${SOCKET_PROXY_PORT}
+    networks:
+      - socket_proxy
+    volumes:
+      # -- backup config 
+      - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
+      # -- services volumes to backup (sources)
+      - server_admin_portainer_data:/backup/portainer-data-backup:ro
+      - server_backup_docker_volume_backup:/backup/duplicati-data-backup:ro
+      # -- path to local backup (destination)
+      - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive
+    restart: unless-stopped
+
+
+  # ----------------------------------------
   # DUPLICATI
-  # Backup services
+  # Remote backup solution
   # ----------------------------------------
   duplicati:
     image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
       - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
+      - PUID=1010
+      - PGID=1010
       - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
       - CLI_ARGS=${DUPLICATI_CLI_ARGS}
       - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD}
@@ -20,20 +68,19 @@ services:
     ports:
       - ${DUPLICATI_PORT}:8200
     volumes:
-      - ../docker/volumes/backup/duplicati/config:/config
-      - /mnt/hdd500:/backups
-      - ../:/source/home-server
-      - /var/lib/docker/volumes:/source/docker/volumes:ro
+      # -- duplicati config 
+      - server_backup_duplicati_config:/config
+      # -- sources (project dir to save env and LOCAL_BACKUPS_PATH to duplicate docker volumes backups in cloud)
+      - ../:/source/home
+      - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/source/docker-volume-backup
+      # -- local destination (just in case)
+      - ${LOCAL_BACKUPS_PATH}/duplicati:/backups
     labels:
       traefik.enable: true
-      traefik.http.routers.duplicati.rule: Host(`backup.${DOMAIN}`)
+      traefik.http.routers.duplicati.rule: Host(`duplicati.${DOMAIN}`)
       traefik.http.routers.duplicati.entrypoints: websecure
       traefik.http.routers.duplicati.tls.certresolver: myresolver
       traefik.http.routers.duplicati.middlewares: authentik-auth
+      docker-volume-backup.stop-during-backup: duplicati-service
     restart: unless-stopped
 
-
-
-networks:
-  traefik_proxy:
-    external: true
