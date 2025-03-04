@@ -1,5 +1,9 @@
 # DOCKER UTILS
 
+networks:
+  socket_proxy:
+    external: true
+
 services:
   # ----------------------------------------
   # SOCKET-PROXY
@@ -16,16 +20,17 @@ services:
       - VERSION=1
       
       - INFO=1 # Portainer
-      - IMAGES=1 # Portainer
+      - IMAGES=1 # Portainer, backup
       - NETWORKS=1 # Portainer
-      - VOLUMES=1 # Portainer
-      - CONTAINERS=1 # Traefik, portainer, etc.
+      - VOLUMES=1 # Portainer, backup
+      - CONTAINERS=1 # Traefik, portainer, backup, etc.
 
-      - ALLOW_START=1 # Portainer
-      - ALLOW_STOP=1 # Portainer
+      - ALLOW_START=1 # Portainer, backup
+      - ALLOW_STOP=1 # Portainer, backup
       - ALLOW_RESTARTS=1 # Portainer
       - SERVICES=1 # Portainer
       - TASKS=1 # Portainer
+      - EXEC=1 # backup
       # - POST=1 # Watchtower
     
       - AUTH=0
@@ -34,7 +39,6 @@ services:
       - COMMIT=0
       - CONFIGS=0
       - DISTRIBUTION=0
-      - EXEC=0
       - NODES=0
       - PLUGINS=0
       - SESSION=0
@@ -53,8 +57,3 @@ services:
     security_opt:
         - no-new-privileges:true
     restart: unless-stopped
-
-
-networks:
-  socket_proxy:
-    external: true

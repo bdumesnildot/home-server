@@ -2,18 +2,16 @@
 
 This home server setup provides a collection of self-hosted services for media streaming, authentication, and emulation. It uses **Docker Compose** to manage and deploy the services efficiently.
 
-
+## SERVICES
 
 ### TRAEFIK 🚦
 
 - **[Traefik](https://traefik.io/)**: Reverse proxy with SSL support for managing and securing your web services.
 
 
-
-### MANAGEMENT 🎛️
+### ADMIN 🎛️
 
 - **[Portainer CE](https://docs.portainer.io/)**: Toolset that allows you to easily build and manage containers in Docker
-
 
 
 ### DOCKER 🐳
@@ -21,11 +19,9 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Docker socket proxy](https://docs.linuxserver.io/images/docker-socket-proxy/)**: Security-enhanced proxy which allows you to apply access rules to the Docker socket
 
 
-
 ### AUTH 🔐
 
 - **[Authentik](https://goauthentik.io/)**: IdP (Identity Provider) and SSO (single sign on)
-
 
 
 ### HTPC 🎬
@@ -39,9 +35,51 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Radarr](https://radarr.video/)**: Automated movie management.
 
 
-
 ### ARCADE 🕹️
 - **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
+
+## SETUP
+
+1. **Install Docker and Docker Compose**:
+
+   Ensure Docker and Docker Compose are installed on your system. Follow the official installation guides for your operating system.
+
+2. **Create and Configure `.env` File**:
+
+   Copy the `.env.example` template to `.env`.
+
+   Fill in the necessary environment variables in the `.env` file.
+
+3. **Create Shared Docker Networks**:
+
+   Define the shared networks required for inter-service communication.
+
+   ```sh
+   docker network create traefik-public
+   docker network create internal
+   ```
+
+4. **Create Shared Docker Volumes**:
+
+   Set up the shared volumes for persistent data storage.
+
+  ```sh
+   docker volume create 
+   ```
+
+5. **Deploy Services**:
+
+   Run the following command to start all services:
+
+   ```sh
+   docker compose up -d
+   ```
+
+5. **Access and Setup Services**:
+
+    Once the services are up and running, you can access them via the configured URLs or ports.
+
+    Authentik Setup: It is recommended to set up Authentik via auth.<your-domain> as it handles the common authentication logic for your services.
 
 
 <br>

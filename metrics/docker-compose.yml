@@ -1,4 +1,18 @@
-# OBSERVABILLITY
+# METRICS
+
+volumes:
+  server_metrics_grafana_data:
+    external: true
+  server_metrics_grafana_provisioning:
+    external: true
+  server_metrics_prometheus_data:
+    external: true
+
+networks:
+  traefik_proxy:
+    external: true
+  metrics:
+    external: true
 
 services:
   # ----------------------------------------
@@ -8,7 +22,8 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
-    user: ${PUID}:${PGID}
+    # user: ${PUID}:${PGID}
+    user: 1010:1010
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_SECURITY_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_SECURITY_ADMIN_PASSWORD}
@@ -18,9 +33,8 @@ services:
     ports:
       - ${GRAFANA_PORT}:3000
     volumes:
-      # - ../docker/volumes/grafana/data:/var/lib/grafana
-      # - ../docker/volumes/grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana:/etc/grafana/provisioning/datasources
+      - server_metrics_grafana_data:/var/lib/grafana
+      - server_metrics_grafana_provisioning:/etc/grafana/provisioning
       - /etc/localtime:/etc/localtime:ro
     labels:
       traefik.enable: true
@@ -48,7 +62,7 @@ services:
       - ${PROMETHEUS_PORT}:9090
     volumes:
       - ./prometheus:/etc/prometheus
-      - ../docker/volumes/metrics/prometheus:/prometheus
+      - server_metrics_prometheus_data:/prometheus
       - /etc/localtime:/etc/localtime:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -56,13 +70,13 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    labels:
-      traefik.enable: true
-      traefik.docker.network: traefik_proxy
-      traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
-      traefik.http.routers.prometheus.entrypoints: websecure
-      traefik.http.routers.prometheus.tls.certresolver: myresolver
-      traefik.http.routers.prometheus.middlewares: authentik-auth
+    # labels:
+      # traefik.enable: true
+      # traefik.docker.network: traefik_proxy
+      # traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
+      # traefik.http.routers.prometheus.entrypoints: websecure
+      # traefik.http.routers.prometheus.tls.certresolver: myresolver
+      # traefik.http.routers.prometheus.middlewares: authentik-auth
     restart: unless-stopped
 
 
@@ -73,7 +87,8 @@ services:
   prometheus-node-exporter:
     image: prom/node-exporter:latest
     container_name: prometheus-node-exporter
-    user: ${PUID}:${PGID}
+    # user: ${PUID}:${PGID}
+    user: 1010:1010
     networks:
       - metrics
     ports:
@@ -89,11 +104,3 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
-
-
-
-networks:
-  traefik_proxy:
-    external: true
-  metrics:
-    external: true

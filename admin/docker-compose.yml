@@ -1,4 +1,14 @@
-# MANAGEMENT
+# ADMIN
+
+volumes:
+  server_admin_portainer_data:
+    external: true
+
+networks:
+  traefik_proxy:
+    external: true
+  socket_proxy:
+    external: true
 
 services:
   # ----------------------------------------
@@ -8,15 +18,16 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
+    user: 1010:1010
     environment:
       - TZ=${TZ}
     networks:
-      - socket_proxy
       - traefik_proxy
+      - socket_proxy
     ports:
       - ${PORTAINER_PORT}:9000
     volumes:
-      - ../docker/volumes/admin/portainer/data:/data
+      - server_admin_portainer_data:/data
     command: -H tcp://socket-proxy:${SOCKET_PROXY_PORT}
     security_opt:
       - no-new-privileges:true
@@ -28,14 +39,7 @@ services:
       traefik.http.routers.portainer.entrypoints: websecure
       traefik.http.routers.portainer.tls.certresolver: myresolver
       traefik.http.routers.portainer.middlewares: authentik-auth
+      docker-volume-backup.stop-during-backup: portainer-service
     restart: unless-stopped
     depends_on:
       - socket-proxy
-
-
-
-networks:
-  socket_proxy:
-    external: true
-  traefik_proxy:
-    external: true

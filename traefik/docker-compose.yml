@@ -1,5 +1,17 @@
 # REVERSE PROXY
 
+volumes:
+  server_traefik_letsencrypt:
+    external: true
+
+networks:
+  traefik_proxy:
+    external: true
+  socket_proxy:
+    external: true
+  metrics:
+    external: true
+
 services:
   # ----------------------------------------
   # TRAEFIK
@@ -8,6 +20,7 @@ services:
   traefik:
     image: traefik:v3.3.3
     container_name: traefik
+    user: 1010:1010
     environment:
       - DOMAIN=${DOMAIN}
       - CF_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
@@ -21,7 +34,8 @@ services:
       - ${TRAEFIK_DASHBOARD_PORT}:8080
       - ${TRAEFIK_METRICS_PORT}:8082
     volumes:
-      - ../docker/volumes/traefik/letsencrypt:/letsencrypt
+      # - ../docker/volumes/traefik/letsencrypt:/letsencrypt
+      - server_traefik_letsencrypt:/letsencrypt
     command:
       - --api.insecure=true
       - --log.level=DEBUG
@@ -60,9 +74,6 @@ services:
       # traefik.http.middlewares.ratelimit.ratelimit.average: 100
       # traefik.http.middlewares.ratelimit.ratelimit.period: 1m
 
-      ## -- Middelware "basic-auth"
-      traefik.http.middlewares.basic-auth.basicauth.users: ${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
-
       ## -- Middelware "authentik-auth"
       traefik.http.middlewares.authentik-auth.forwardAuth.address: http://authentik_server:9000/outpost.goauthentik.io/auth/traefik
       traefik.http.middlewares.authentik-auth.forwardAuth.trustForwardHeader: true
@@ -81,13 +92,3 @@ services:
       traefik.http.routers.whoami.entrypoints: websecure
       traefik.http.routers.whoami.tls.certresolver: myresolver
       traefik.http.routers.whoami.middlewares: authentik-auth
-
-
-
-networks:
-  traefik_proxy:
-    external: true
-  socket_proxy:
-    external: true
-  metrics:
-    external: true

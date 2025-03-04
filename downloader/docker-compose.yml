@@ -1,5 +1,17 @@
 # DOWNLOADING SERVICES
 
+volumes:
+  server_downloader_gluetun_data:
+    external: true
+  server_downloader_qbittorrent_config:
+    external: true
+  server_downloader_nzbget_config:
+    external: true
+
+networks:
+  traefik_proxy:
+    external: true
+
 services:
   # ----------------------------------------
   # GLUETUN
@@ -24,7 +36,8 @@ services:
       - ${QBITTORRENT_PORT}:8888 # qbittorrent
       - ${NZBGET_PORT}:6789 # nzbget
     volumes:
-      - ../docker/volumes/downloader/gluetun:/gluetun
+      # - ../docker/volumes/downloader/gluetun:/gluetun
+      - server_downloader_gluetun_data:/gluetun
     devices:
       - /dev/net/tun:/dev/net/tun
     labels:
@@ -56,12 +69,15 @@ services:
     container_name: qbittorrent
     environment:
       - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PUID}
+      - PUID=1010
+      - PGID=1010
+      # - PUID=${PUID}
+      # - PGID=${PUID}
       - WEBUI_PORT=${QBITTORRENT_PORT}
     network_mode: 'service:gluetun' # see gluetun for traefik routing
     volumes:
-      - ../docker/volumes/downloader/qbittorrent:/config
+      # - ../docker/volumes/downloader/qbittorrent:/config
+      - server_downloader_qbittorrent_config:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads
     restart: unless-stopped
 
@@ -75,17 +91,15 @@ services:
     container_name: nzbget
     environment:
       - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PUID}
+      - PUID=1010
+      - PGID=1010
+      # - PUID=${PUID}
+      # - PGID=${PUID}
       - NZBGET_USER=${NZBGET_USER}
       - NZBGET_PASS=${NZBGET_PASS}
     network_mode: 'service:gluetun' # see gluetun for traefik routing
     volumes:
-      - ../docker/volumes/downloader/nzbget:/config
+      # - ../docker/volumes/downloader/nzbget:/config
+      - server_downloader_nzbget_config:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads/completed
     restart: unless-stopped
-
-
-networks:
-  traefik_proxy:
-    external: true

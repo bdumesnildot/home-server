@@ -1,3 +1,56 @@
+volumes:
+  # -- admin
+  server_admin_portainer_data:
+    external: true
+  # -- arcade
+  server_arcade_emulatorjs_config:
+    external: true
+  server_arcade_emulatorjs_data:
+    external: true
+  # -- auth
+  server_auth_authentik_postgresql:
+    external: true
+  server_auth_authentik_redis:
+    external: true
+  server_auth_authentik_server_media:
+    external: true
+  server_auth_authentik_server_templates:
+    external: true
+  server_auth_authentik_server_certs:
+    external: true
+  # -- backup
+  server_backup_docker_volume_backup:
+    external: true
+  server_backup_duplicati_config:
+    external: true
+  # -- downloader
+  server_downloader_gluetun_data:
+    external: true
+  server_downloader_qbittorrent_config:
+    external: true
+  server_downloader_nzbget_config:
+    external: true
+  # -- htpc
+  server_htpc_prowlarr_config:
+    external: true
+  server_htpc_sonarr_config:
+    external: true
+  server_htpc_radarr_config:
+    external: true
+  server_htpc_plex_config:
+    external: true
+  # -- metrics
+  server_metrics_grafana_data:
+    external: true
+  server_metrics_grafana_provisioning:
+    external: true
+  server_metrics_prometheus_data:
+    external: true
+  # -- traefik
+  server_traefik_letsencrypt:
+    external: true
+
+
 networks:
   traefik_proxy:
     external: true
