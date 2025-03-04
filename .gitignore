@@ -1,13 +1,14 @@
 # -- ENVIRONMENT
 .env
 # sym link
+!/admin/.env
 !/arcade/.env
 !/auth/.env
 !/backup/.env
 !/docker/.env
 !/downloader/.env
 !/htpc/.env
-!/management/.env
+!/metrics/.env
 !/traefik/.env
 
 # -- LOCAL SETTINGS

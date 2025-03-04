@@ -14,10 +14,12 @@ services:
     networks:
       - traefik_proxy
       - socket_proxy
+      - metrics
     ports:
       - 80:80
       - 443:443
       - ${TRAEFIK_DASHBOARD_PORT}:8080
+      - ${TRAEFIK_METRICS_PORT}:8082
     volumes:
       - ../docker/volumes/traefik/letsencrypt:/letsencrypt
     command:
@@ -35,6 +37,14 @@ services:
       - --certificatesresolvers.myresolver.acme.storage=letsencrypt/acme.json
       - --certificatesresolvers.myresolver.acme.dnschallenge=true
       - --certificatesresolvers.myresolver.acme.dnschallenge.provider=cloudflare
+      ## -- metrics
+      - --metrics.prometheus=true
+      - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
+      - --entryPoints.metrics.address=:8082
+      - --metrics.prometheus.entryPoint=metrics
+      - --metrics.prometheus.addEntryPointsLabels=true
+      - --metrics.prometheus.addrouterslabels=true
+      - --metrics.prometheus.addServicesLabels=true
     labels:
       traefik.enable: true
       traefik.docker.network: traefik_proxy
@@ -78,4 +88,6 @@ networks:
   traefik_proxy:
     external: true
   socket_proxy:
+    external: true
+  metrics:
     external: true

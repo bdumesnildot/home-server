@@ -3,13 +3,16 @@ networks:
     external: true
   socket_proxy:
     external: true
+  metrics:
+    external: true
 
 include:
+- ./admin/docker-compose.yml
 - ./arcade/docker-compose.yml
 - ./auth/docker-compose.yml
 - ./backup/docker-compose.yml
 - ./docker/docker-compose.yml
 - ./downloader/docker-compose.yml
 - ./htpc/docker-compose.yml
-- ./management/docker-compose.yml
+- ./metrics/docker-compose.yml
 - ./traefik/docker-compose.yml
