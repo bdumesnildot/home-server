@@ -16,7 +16,7 @@ services:
     ports:
       - ${PORTAINER_PORT}:9000
     volumes:
-      - ../docker/volumes/portainer/data:/data
+      - ../docker/volumes/admin/portainer/data:/data
     command: -H tcp://socket-proxy:${SOCKET_PROXY_PORT}
     security_opt:
       - no-new-privileges:true
@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     depends_on:
       - socket-proxy
-    
+
 
 
 networks:

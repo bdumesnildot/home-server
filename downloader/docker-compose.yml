@@ -24,7 +24,7 @@ services:
       - ${QBITTORRENT_PORT}:8888 # qbittorrent
       - ${NZBGET_PORT}:6789 # nzbget
     volumes:
-      - ../docker/volumes/htpc/gluetun:/gluetun
+      - ../docker/volumes/downloader/gluetun:/gluetun
     devices:
       - /dev/net/tun:/dev/net/tun
     labels:
@@ -61,7 +61,7 @@ services:
       - WEBUI_PORT=${QBITTORRENT_PORT}
     network_mode: 'service:gluetun' # see gluetun for traefik routing
     volumes:
-      - ../docker/volumes/htpc/qbittorrent:/config
+      - ../docker/volumes/downloader/qbittorrent:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads
     restart: unless-stopped
 
@@ -81,7 +81,7 @@ services:
       - NZBGET_PASS=${NZBGET_PASS}
     network_mode: 'service:gluetun' # see gluetun for traefik routing
     volumes:
-      - ../docker/volumes/htpc/nzbget:/config
+      - ../docker/volumes/downloader/nzbget:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads/completed
     restart: unless-stopped
 

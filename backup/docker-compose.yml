@@ -20,9 +20,10 @@ services:
     ports:
       - ${DUPLICATI_PORT}:8200
     volumes:
-      - ../docker/volumes/duplicati/config:/config
+      - ../docker/volumes/backup/duplicati/config:/config
       - /mnt/hdd500:/backups
-      - ../:/source
+      - ../:/source/home-server
+      - /var/lib/docker/volumes:/source/docker/volumes:ro
     labels:
       traefik.enable: true
       traefik.http.routers.duplicati.rule: Host(`backup.${DOMAIN}`)

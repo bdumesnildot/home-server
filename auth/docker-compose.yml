@@ -16,7 +16,7 @@ services:
     ports:
       - ${AUTHENTIK_POSTGRESQL_PORT}:5432
     volumes:
-      - ../docker/volumes/authentik/postgresql/data:/var/lib/postgresql/data
+      - ../docker/volumes/auth/authentik/postgresql/data:/var/lib/postgresql/data
     labels:
       traefik.enable: true
     healthcheck:
@@ -38,7 +38,7 @@ services:
     ports:
       - ${AUTHENTIK_REDIS_PORT}:6379
     volumes:
-      - ../docker/volumes/authentik/redis/data:/data
+      - ../docker/volumes/auth/authentik/redis/data:/data
     command: 
       - --save 60 1 
       - --loglevel warning
@@ -83,8 +83,8 @@ services:
     ports:
       - ${AUTHENTIK_SERVER_PORT}:9000
     volumes:
-      - ../docker/volumes/authentik/media:/media
-      - ../docker/volumes/authentik/custom-templates:/templates
+      - ../docker/volumes/auth/authentik/media:/media
+      - ../docker/volumes/auth/authentik/custom-templates:/templates
     command: server
     labels:
       traefik.enable: true
@@ -136,9 +136,9 @@ services:
       - authentik_server
       - socket_proxy
     volumes:
-      - ../docker/volumes/authentik/media:/media
-      - ../docker/volumes/authentik/certs:/certs
-      - ../docker/volumes/authentik/custom-templates:/templates
+      - ../docker/volumes/auth/authentik/media:/media
+      - ../docker/volumes/auth/authentik/certs:/certs
+      - ../docker/volumes/auth/authentik/custom-templates:/templates
     user: root
     command: worker
     depends_on:
