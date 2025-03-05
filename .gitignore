@@ -1,7 +1,6 @@
 # -- ENVIRONMENT
 .env
 # sym link
-!/admin/.env
 !/arcade/.env
 !/auth/.env
 !/backup/.env
@@ -13,6 +12,7 @@
 
 # -- LOCAL SETTINGS
 .vscode
+.old
 
 # -- DOCKER VOLUMES
 docker/volumes/*

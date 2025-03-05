@@ -163,9 +163,11 @@ services:
       - server_auth_authentik_server_media:/media
       - server_auth_authentik_server_templates:/templates
     command: worker
+    restart: unless-stopped
     depends_on:
       authentik_postgresql:
         condition: service_healthy
       authentik_redis:
         condition: service_healthy
-    restart: unless-stopped
+      socket-proxy:
+        condition: service_healthy

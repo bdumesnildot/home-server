@@ -9,14 +9,10 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Traefik](https://traefik.io/)**: Reverse proxy with SSL support for managing and securing your web services.
 
 
-### ADMIN 🎛️
-
-- **[Portainer CE](https://docs.portainer.io/)**: Toolset that allows you to easily build and manage containers in Docker
-
-
 ### DOCKER 🐳
 
 - **[Docker socket proxy](https://docs.linuxserver.io/images/docker-socket-proxy/)**: Security-enhanced proxy which allows you to apply access rules to the Docker socket
+- **[Portainer CE](https://docs.portainer.io/)**: Toolset that allows you to easily build and manage containers in Docker
 
 
 ### AUTH 🔐

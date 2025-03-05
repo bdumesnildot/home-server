@@ -47,6 +47,9 @@ services:
       # -- path to local backup (destination)
       - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive
     restart: unless-stopped
+    depends_on:
+      socket-proxy:
+        condition: service_healthy
 
 
   # ----------------------------------------
