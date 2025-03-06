@@ -14,6 +14,8 @@ volumes:
 networks:
   traefik_proxy:
     external: true
+  metrics:
+    external: true
   prowlarr:
 
 services:
@@ -50,20 +52,23 @@ services:
 
 
   flaresolverr:
-    # DockerHub mirror flaresolverr/flaresolverr:latest
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    # image: flaresolverr/flaresolverr:latest
+    image: alexfozor/flaresolverr:pr-1300-experimental
     container_name: flaresolverr
+    user: root
     environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
       LOG_LEVEL: info
-      LOG_HTML: ${FLARESOLVER_LOG_HTML}
-      CAPTCHA_SOLVER: ${FLARESOLVER_CAPTCHA_SOLVER}
+      TZ: ${TZ}
+      LANG: en_GB
+      CAPTCHA_SOLVER: none
+      HEADLESS: true
+      PROMETHEUS_ENABLED: true
     networks:
       - prowlarr
+      - metrics
     ports:
       - ${PROWLARR_FLARESOLVER_PORT}:8191
+      - ${PROWLARR_FLARESOLVER_PROMETHEUS_PORT}:8191
     restart: unless-stopped
 
 

@@ -23,6 +23,11 @@ scrape_configs:
     static_configs:
       - targets: ['traefik:8082']
 
+  - job_name: flaresolverr
+    scrape_interval: 1m
+    static_configs:
+      - targets: ['flaresolverr:8192']
+
   # - job_name: docker
   #   static_configs:
   #     - targets: ["127.0.0.1:9323"]

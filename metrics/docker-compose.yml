@@ -70,12 +70,12 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
     # labels:
-      # traefik.enable: true
-      # traefik.docker.network: traefik_proxy
-      # traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
-      # traefik.http.routers.prometheus.entrypoints: websecure
-      # traefik.http.routers.prometheus.tls.certresolver: myresolver
-      # traefik.http.routers.prometheus.middlewares: authentik-auth
+    #   traefik.enable: true
+    #   traefik.docker.network: traefik_proxy
+    #   traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
+    #   traefik.http.routers.prometheus.entrypoints: websecure
+    #   traefik.http.routers.prometheus.tls.certresolver: myresolver
+    #   traefik.http.routers.prometheus.middlewares: authentik-auth
     restart: unless-stopped
 
 
