@@ -3,7 +3,11 @@
 volumes:
   server_auth_authentik_postgresql:
     external: true
+  server_auth_authentik_postgresql_dumps:
+    external: true
   server_auth_authentik_redis:
+    external: true
+  server_auth_authentik_redis_dumps:
     external: true
   server_auth_authentik_server_media:
     external: true
@@ -28,17 +32,20 @@ services:
     container_name: authentik-postgresql
     environment:
       TZ: ${TZ}
-      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
-      POSTGRES_USER: ${PG_USER}
       POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS:?database password required}
     networks:
       - authentik_server
     ports:
       - ${AUTHENTIK_POSTGRESQL_PORT}:5432
     volumes:
       - server_auth_authentik_postgresql:/var/lib/postgresql/data
+      - server_auth_authentik_postgresql_dumps:/tmp/dumps
+      - ../scripts/postgres-backup.sh:/postgres-backup.sh:ro
     labels:
-      traefik.enable: true
+      docker-volume-backup.exec-label: authentik-postgresql
+      docker-volume-backup.archive-pre: sh -c '/postgres-backup.sh'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       start_period: 20s
@@ -59,11 +66,15 @@ services:
       - ${AUTHENTIK_REDIS_PORT}:6379
     volumes:
       - server_auth_authentik_redis:/data
+      - server_auth_authentik_redis_dumps:/tmp/dumps
     command: 
-      - --save 60 1 
       - --loglevel warning
+      - --save 60 1 # Save every 1 minutes if at least 1 write occurs
+      - --dir /data
+      - --dbfilename dump.rdb
     labels:
-      - "traefik.enable=true"
+      docker-volume-backup.exec-label: authentik-redis
+      docker-volume-backup.archive-pre: sh -c 'redis-cli SAVE && [ -f /data/dump.rdb ] && cp /data/dump.rdb /tmp/dumps/'
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       start_period: 20s
@@ -108,6 +119,7 @@ services:
       - server_auth_authentik_server_templates:/templates
     command: server
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.docker.network: traefik_proxy
 
@@ -122,6 +134,8 @@ services:
       traefik.http.routers.authentik-output.entrypoints: websecure
       traefik.http.routers.authentik-output.tls.certresolver: myresolver
       traefik.http.services.authentik-output.loadbalancer.server.port: 9000
+      # -- backup
+      docker-volume-backup.stop-during-backup: authentik-server-service
     depends_on:
       authentik_postgresql:
         condition: service_healthy

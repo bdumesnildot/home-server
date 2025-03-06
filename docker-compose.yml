@@ -1,3 +1,18 @@
+# MAIN DOCKER COMPOSE FOR HOME SERVER
+
+# -------------
+# commands: 
+#    - `bash scripts/init.sh`: make sure all external volumes and networks used by services has been created.
+#
+#    - `docker compose up -d`: start services
+#    - `docker compose down`: stop services
+#
+#    - `docker compose logs --tail 200 -f`: see follow logs from all services
+#
+#    - `docker exec docker-volume-backup backup`: to manually create a new backup archive of all docker volumes (path: ${LOCAL_BACKUPS_PATH}/docker-volume-backup/)
+#
+# -------------
+
 volumes:
   # -- arcade
   server_arcade_emulatorjs_config:
@@ -7,7 +22,11 @@ volumes:
   # -- auth
   server_auth_authentik_postgresql:
     external: true
+  server_auth_authentik_postgresql_dumps:
+    external: true
   server_auth_authentik_redis:
+    external: true
+  server_auth_authentik_redis_dumps:
     external: true
   server_auth_authentik_server_media:
     external: true
@@ -50,15 +69,14 @@ volumes:
   server_traefik_letsencrypt:
     external: true
 
-
 networks:
-  # -- connect containers to traefik reverse proxy container
+  # -- used by traefik reverse proxy
   traefik_proxy:
     external: true
-  # -- connect containers to the Docker socket securely using a socket proxy
+  # -- used to access the Docker socket securely using a socket proxy
   socket_proxy:
     external: true
-  # -- connect containers to metrics services
+  # -- used for metrics
   metrics:
     external: true
 
@@ -71,4 +89,3 @@ include:
 - ./htpc/docker-compose.yml
 - ./metrics/docker-compose.yml
 - ./traefik/docker-compose.yml
-

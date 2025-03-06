@@ -1,14 +1,24 @@
 # BACKUP
 
 volumes:
-  # -- admin
-  server_admin_portainer_data:
-    external: true
   # -- auth
+  server_auth_authentik_postgresql_dumps:
+    external: true
+  server_auth_authentik_redis_dumps:
+    external: true
+  server_auth_authentik_server_media:
+    external: true
+  server_auth_authentik_server_templates:
+    external: true
+  server_auth_authentik_server_certs:
+    external: true
   # -- backup
   server_backup_docker_volume_backup:
     external: true
   server_backup_duplicati_config:
+    external: true
+  # -- docker
+  server_docker_portainer_data:
     external: true
   # -- downloader
   # -- htpc
@@ -25,12 +35,12 @@ services:
   # ----------------------------------------
   # DOCKER VOLUME BACKUP
   # Backup Docker volumes locally or to compatible storage
+  # documentation: https://offen.github.io/docker-volume-backup/
   # ----------------------------------------
   docker-volume-backup:
     image: offen/docker-volume-backup:latest
     container_name: docker-volume-backup
-    # user: ${PUID}:${PGID}
-    user: 1010:1010
+    user: root
     environment:
       - GPG_PASSPHRASE=${GPG_PASSPHRASE}
       - NOTIFICATION_URLS=${BACKUP_BACKUP_NOTIFICATION_URLS}
@@ -42,8 +52,16 @@ services:
       # -- backup config 
       - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
       # -- services volumes to backup (sources)
-      - server_admin_portainer_data:/backup/portainer-data-backup:ro
+      # auth
+      - server_auth_authentik_postgresql_dumps:/backup/authentik-postgresql-data-backup:ro
+      - server_auth_authentik_redis_dumps:/backup/authentik-redis-data-backup:ro
+      - server_auth_authentik_server_media:/backup/authentik-server-media-data-backup:ro
+      - server_auth_authentik_server_templates:/backup/authentik-server-templates-data-backup:ro
+      - server_auth_authentik_server_certs:/backup/authentik-server-certs-data-backup:ro
+      # backup
       - server_backup_docker_volume_backup:/backup/duplicati-data-backup:ro
+      # docker
+      - server_docker_portainer_data:/backup/portainer-data-backup:ro
       # -- path to local backup (destination)
       - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive
     restart: unless-stopped
