@@ -18,9 +18,9 @@ services:
   socket-proxy:
     image: lscr.io/linuxserver/socket-proxy:latest
     container_name: socket-proxy
+    user: root
     environment:
       - LOG_LEVEL=info
-
       - EVENTS=1
       - PING=1
       - VERSION=1
@@ -63,7 +63,7 @@ services:
     security_opt:
         - no-new-privileges:true
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "2375"] # Example for Docker socket
+      test: ["CMD", "nc", "-z", "localhost", "2375"] # Docker socket
       interval: 5s
       retries: 3
       start_period: 10s
@@ -77,9 +77,9 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
-    user: 1010:1010
+    user: ${PUID}:${PGID}
     environment:
-      - TZ=${TZ}
+      TZ: ${TZ}
     networks:
       - traefik_proxy
       - socket_proxy

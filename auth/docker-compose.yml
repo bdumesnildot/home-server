@@ -30,6 +30,7 @@ services:
   authentik_postgresql:
     image: docker.io/library/postgres:16-alpine
     container_name: authentik-postgresql
+    user: root
     environment:
       TZ: ${TZ}
       POSTGRES_DB: ${PG_DB}
@@ -60,6 +61,7 @@ services:
   authentik_redis:
     image: docker.io/library/redis:alpine
     container_name: authentik-redis
+    user: root
     networks:
       - authentik_server
     ports:
@@ -90,7 +92,7 @@ services:
   authentik_server:
     image: ghcr.io/goauthentik/server:2025.2.0
     container_name: authentik-server
-    user: 1010:1010
+    user: ${PUID}:${PGID}
     environment:
       AUTHENTIK_REDIS__HOST: authentik_redis
       AUTHENTIK_POSTGRESQL__HOST: authentik_postgresql

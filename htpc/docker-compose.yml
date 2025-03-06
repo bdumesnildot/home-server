@@ -28,11 +28,9 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
     networks:
       - traefik_proxy
       - prowlarr
@@ -56,14 +54,12 @@ services:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
-      - LOG_LEVEL=info
-      - LOG_HTML=${FLARESOLVER_LOG_HTML}
-      - CAPTCHA_SOLVER=${FLARESOLVER_CAPTCHA_SOLVER}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      LOG_LEVEL: info
+      LOG_HTML: ${FLARESOLVER_LOG_HTML}
+      CAPTCHA_SOLVER: ${FLARESOLVER_CAPTCHA_SOLVER}
     networks:
       - prowlarr
     ports:
@@ -79,11 +75,9 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
     networks:
       - traefik_proxy
     ports:
@@ -109,11 +103,9 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
     networks:
       - traefik_proxy
     ports:
@@ -139,13 +131,11 @@ services:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
-      - VERSION=docker
-      - PLEX_CLAIM=${PMSTOKEN}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      VERSION: docker
+      PLEX_CLAIM: ${PMSTOKEN}
     networks:
       - traefik_proxy
     ports:

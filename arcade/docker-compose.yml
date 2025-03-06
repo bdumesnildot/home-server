@@ -19,11 +19,9 @@ services:
     image: lscr.io/linuxserver/emulatorjs:latest
     container_name: emulatorjs
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      # - PUID=${PUID}
-      # - PGID=${PGID}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
     networks:
       - traefik_proxy
     ports:

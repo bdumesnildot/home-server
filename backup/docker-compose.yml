@@ -42,10 +42,10 @@ services:
     container_name: docker-volume-backup
     user: root
     environment:
-      - GPG_PASSPHRASE=${GPG_PASSPHRASE}
-      - NOTIFICATION_URLS=${BACKUP_BACKUP_NOTIFICATION_URLS}
-      - NOTIFICATION_LEVEL=error
-      - DOCKER_HOST=tcp://socket-proxy:${SOCKET_PROXY_PORT}
+      NOTIFICATION_LEVEL: error
+      GPG_PASSPHRASE: ${GPG_PASSPHRASE}
+      NOTIFICATION_URLS: ${BACKUP_BACKUP_NOTIFICATION_URLS}
+      DOCKER_HOST: tcp://socket-proxy:${SOCKET_PROXY_PORT}
     networks:
       - socket_proxy
     volumes:
@@ -78,12 +78,12 @@ services:
     image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
-      - TZ=${TZ}
-      - PUID=1010
-      - PGID=1010
-      - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
-      - CLI_ARGS=${DUPLICATI_CLI_ARGS}
-      - DUPLICATI__WEBSERVICE_PASSWORD=${DUPLICATI__WEBSERVICE_PASSWORD}
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      SETTINGS_ENCRYPTION_KEY: ${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
+      CLI_ARGS: ${DUPLICATI_CLI_ARGS}
+      DUPLICATI__WEBSERVICE_PASSWORD: ${DUPLICATI__WEBSERVICE_PASSWORD}
     networks:
       - traefik_proxy
     ports:

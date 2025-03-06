@@ -22,11 +22,10 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
-    # user: ${PUID}:${PGID}
-    user: 1010:1010
+    user: ${PUID}:${PGID}
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_SECURITY_ADMIN_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_SECURITY_ADMIN_PASSWORD}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_SECURITY_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_SECURITY_ADMIN_PASSWORD}
     networks:
       - traefik_proxy
       - metrics
@@ -87,8 +86,7 @@ services:
   prometheus-node-exporter:
     image: prom/node-exporter:latest
     container_name: prometheus-node-exporter
-    # user: ${PUID}:${PGID}
-    user: 1010:1010
+    user: ${PUID}:${PGID}
     networks:
       - metrics
     ports:
