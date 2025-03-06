@@ -62,11 +62,6 @@ services:
     read_only: true
     security_opt:
         - no-new-privileges:true
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "2375"] # Docker socket
-      interval: 5s
-      retries: 3
-      start_period: 10s
     restart: unless-stopped
 
 
@@ -101,7 +96,4 @@ services:
       traefik.http.routers.portainer.middlewares: authentik-auth
       # -- backup
       docker-volume-backup.stop-during-backup: portainer-service
-    depends_on:
-      socket-proxy:
-        condition: service_healthy
     restart: unless-stopped
