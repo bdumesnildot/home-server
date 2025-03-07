@@ -31,6 +31,7 @@ services:
       - server_arcade_emulatorjs_config:/config
       - server_arcade_emulatorjs_data:/data
     labels:
+      # -- traefik
       traefik.enable: true
 
       traefik.http.services.svc-emulatorjs.loadbalancer.server.port: 80
@@ -48,5 +49,8 @@ services:
       traefik.http.routers.emulatorjs-manager.entrypoints: websecure
       traefik.http.routers.emulatorjs-manager.tls.certresolver: myresolver
       traefik.http.routers.emulatorjs-manager.middlewares: authentik-auth
+
+      # -- backup
+      docker-volume-backup.stop-during-backup: emulatorjs-service
 
     restart: unless-stopped

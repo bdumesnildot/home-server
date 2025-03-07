@@ -36,6 +36,7 @@ services:
       - server_metrics_grafana_provisioning:/etc/grafana/provisioning
       - /etc/localtime:/etc/localtime:ro
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.docker.network: traefik_proxy
       traefik.http.routers.grafana.rule: Host(`grafana.${DOMAIN}`)
@@ -43,6 +44,8 @@ services:
       traefik.http.routers.grafana.entrypoints: websecure
       traefik.http.routers.grafana.tls.certresolver: myresolver
       traefik.http.routers.grafana.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: grafana-service
     restart: unless-stopped
 
 
@@ -69,13 +72,16 @@ services:
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
-    # labels:
-    #   traefik.enable: true
-    #   traefik.docker.network: traefik_proxy
-    #   traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
-    #   traefik.http.routers.prometheus.entrypoints: websecure
-    #   traefik.http.routers.prometheus.tls.certresolver: myresolver
-    #   traefik.http.routers.prometheus.middlewares: authentik-auth
+    labels:
+      # -- traefik
+      #   traefik.enable: true
+      #   traefik.docker.network: traefik_proxy
+      #   traefik.http.routers.prometheus.rule: Host(`prometheus.${DOMAIN}`)
+      #   traefik.http.routers.prometheus.entrypoints: websecure
+      #   traefik.http.routers.prometheus.tls.certresolver: myresolver
+      #   traefik.http.routers.prometheus.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: prometheus-service
     restart: unless-stopped
 
 

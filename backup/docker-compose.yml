@@ -1,6 +1,11 @@
 # BACKUP
 
 volumes:
+  # -- arcade
+  server_arcade_emulatorjs_config:
+    external: true
+  server_arcade_emulatorjs_data:
+    external: true
   # -- auth
   server_auth_authentik_postgresql_dumps:
     external: true
@@ -21,6 +26,10 @@ volumes:
   server_docker_portainer_data:
     external: true
   # -- downloader
+  server_downloader_qbittorrent_config:
+    external: true
+  server_downloader_nzbget_config:
+    external: true
   # -- htpc
   server_htpc_prowlarr_config:
     external: true
@@ -31,7 +40,12 @@ volumes:
   server_htpc_plex_config:
     external: true
   # -- metrics
-  # -- traefik
+  server_metrics_grafana_data:
+    external: true
+  server_metrics_grafana_provisioning:
+    external: true
+  server_metrics_prometheus_data:
+    external: true
 
 networks:
   traefik_proxy:
@@ -61,6 +75,9 @@ services:
       - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
 
       # -- services volumes to backup (sources)
+      # arcade
+      - server_arcade_emulatorjs_config:/backup/emulatorjs-config-data-backup:ro
+      - server_arcade_emulatorjs_data:/backup/emulatorjs-data-backup:ro
       # auth
       - server_auth_authentik_postgresql_dumps:/backup/authentik-postgresql-data-backup:ro
       - server_auth_authentik_redis_dumps:/backup/authentik-redis-data-backup:ro
@@ -71,11 +88,18 @@ services:
       - server_backup_docker_volume_backup:/backup/duplicati-data-backup:ro
       # docker
       - server_docker_portainer_data:/backup/portainer-data-backup:ro
+      # downloader
+      - server_downloader_qbittorrent_config:/backup/qbittorrent-data-backup:ro
+      - server_downloader_nzbget_config:/backup/nzbget-data-backup:ro
       # htpc
       - server_htpc_prowlarr_config:/backup/prowlarr-data-backup:ro
       - server_htpc_sonarr_config:/backup/sonarr-data-backup:ro
       - server_htpc_radarr_config:/backup/radarr-data-backup:ro
       - server_htpc_plex_config:/backup/plex-data-backup:ro
+      # metrics
+      - server_metrics_grafana_data:/backup/grafana-data-backup:ro
+      - server_metrics_grafana_provisioning:/backup/grafana-provisioning-data-backup:ro
+      - server_metrics_prometheus_data:/backup/prometheus-data-backup:ro
 
       # -- path to local backup (destination)
       - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive

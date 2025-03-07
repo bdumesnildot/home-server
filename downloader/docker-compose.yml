@@ -76,6 +76,8 @@ services:
     volumes:
       - server_downloader_qbittorrent_config:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads
+    labels:
+      docker-volume-backup.stop-during-backup: qbittorrent-service
     restart: unless-stopped
 
 
@@ -96,4 +98,6 @@ services:
     volumes:
       - server_downloader_nzbget_config:/config
       - ${MEDIA_PATH}/torrents/Completed:/downloads/completed
+    labels:
+      docker-volume-backup.stop-during-backup: nzbget-service
     restart: unless-stopped
