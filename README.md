@@ -36,12 +36,21 @@ This home server setup provides a collection of self-hosted services for media s
 
 
 ### ARCADE 🕹️
+
 - **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
 
 
 ### BACKUP 🛟
+
 - **[Offen/docker-volume-backup](https://offen.github.io/docker-volume-backup/)**: Backup Docker volumes locally with pre backup exec commands and stop/restart container management.
 - **[Duplicati](https://docs.duplicati.com/)**: Backup services, use to duplicates archives in cloud storages.
+
+
+### Metrics 📈
+
+- **[Grafana](https://grafana.com/)**: Multi-platform open source analytics and interactive visualization web application.
+- **[Prometheus](https://prometheus.io)**: Collects and stores metrics as time series data.
+- **[Node exporter](https://github.com/prometheus/node_exporter)**: Prometheus exporter for hardware and OS metrics.
 
 
 ## SETUP
@@ -56,24 +65,15 @@ This home server setup provides a collection of self-hosted services for media s
 
    Fill in the necessary environment variables in the `.env` file.
 
-3. **Create Shared Docker Networks**:
+3. **Create Shared Docker Networks and volumes**:
 
    Define the shared networks required for inter-service communication.
 
    ```sh
-   docker network create traefik-public
-   docker network create internal
+   sh ./script/init.sh
    ```
 
-4. **Create Shared Docker Volumes**:
-
-   Set up the shared volumes for persistent data storage.
-
-  ```sh
-   docker volume create 
-   ```
-
-5. **Deploy Services**:
+4. **Deploy Services**:
 
    Run the following command to start all services:
 
