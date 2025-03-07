@@ -23,16 +23,26 @@ This home server setup provides a collection of self-hosted services for media s
 ### HTPC 🎬
 
 - **[Plex Media Server](https://www.plex.tv/)**: Manage and serve media files to Plex clients.
-- **[Gluetun](https://github.com/qdm12/gluetun)**: VPN client supporting multiple VPN service providers for secure connections.
-- **[qBittorrent](https://www.qbittorrent.org/)**: Torrent client for downloading and managing torrent files.
-- **[NZBget](https://nzbget.net/)**: Usenet downloader for managing and downloading Usenet content.
 - **[Prowlarr](https://prowlarr.com/)**: Indexer management for Usenet and torrents.
 - **[Sonarr](https://sonarr.tv/)**: Automated TV series management.
 - **[Radarr](https://radarr.video/)**: Automated movie management.
 
 
+### DOWNLOADER 📥
+
+- **[Gluetun](https://github.com/qdm12/gluetun)**: VPN client supporting multiple VPN service providers for secure connections.
+- **[qBittorrent](https://www.qbittorrent.org/)**: Torrent client for downloading and managing torrent files.
+- **[NZBget](https://nzbget.net/)**: Usenet downloader for managing and downloading Usenet content.
+
+
 ### ARCADE 🕹️
 - **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
+
+
+### BACKUP 🛟
+- **[Offen/docker-volume-backup](https://offen.github.io/docker-volume-backup/)**: Backup Docker volumes locally with pre backup exec commands and stop/restart container management.
+- **[Duplicati](https://docs.duplicati.com/)**: Backup services, use to duplicates archives in cloud storages.
+
 
 ## SETUP
 
