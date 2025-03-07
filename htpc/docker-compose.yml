@@ -41,13 +41,15 @@ services:
     volumes:
       - server_htpc_prowlarr_config:/config
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.docker.network: traefik_proxy
-
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.${DOMAIN}`)
       traefik.http.routers.prowlarr.entrypoints: websecure
       traefik.http.routers.prowlarr.tls.certresolver: myresolver
       traefik.http.routers.prowlarr.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: prowlarr-service
     restart: unless-stopped
 
 
@@ -92,11 +94,14 @@ services:
       - ${MEDIA_PATH}/media/series:/tv
       - ${MEDIA_PATH}/torrents/Completed:/downloads
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN}`)
       traefik.http.routers.sonarr.entrypoints: websecure
       traefik.http.routers.sonarr.tls.certresolver: myresolver
       traefik.http.routers.sonarr.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: sonarr-service
     restart: unless-stopped
 
 
@@ -120,11 +125,14 @@ services:
       - ${MEDIA_PATH}/media/movies:/movies
       - ${MEDIA_PATH}/torrents/Completed:/downloads
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.http.routers.radarr.rule: Host(`radarr.${DOMAIN}`)
       traefik.http.routers.radarr.entrypoints: websecure
       traefik.http.routers.radarr.tls.certresolver: myresolver
       traefik.http.routers.radarr.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: radarr-service
     restart: unless-stopped
 
 
@@ -159,10 +167,13 @@ services:
       - ${MEDIA_PATH}/media/movies:/movies
       - ${MEDIA_PATH}/media/series:/tv
     labels:
+      # -- traefik
       traefik.enable: true
       traefik.http.routers.plex.rule: Host(`plex.${DOMAIN}`)
       traefik.http.routers.plex.entrypoints: websecure
       traefik.http.routers.plex.tls.certresolver: myresolver
       traefik.http.services.plex.loadbalancer.server.port: 32400
       traefik.http.routers.plex.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: plex-service
     restart: unless-stopped

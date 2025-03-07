@@ -22,6 +22,14 @@ volumes:
     external: true
   # -- downloader
   # -- htpc
+  server_htpc_prowlarr_config:
+    external: true
+  server_htpc_sonarr_config:
+    external: true
+  server_htpc_radarr_config:
+    external: true
+  server_htpc_plex_config:
+    external: true
   # -- metrics
   # -- traefik
 
@@ -51,6 +59,7 @@ services:
     volumes:
       # -- backup config 
       - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
+
       # -- services volumes to backup (sources)
       # auth
       - server_auth_authentik_postgresql_dumps:/backup/authentik-postgresql-data-backup:ro
@@ -62,6 +71,12 @@ services:
       - server_backup_docker_volume_backup:/backup/duplicati-data-backup:ro
       # docker
       - server_docker_portainer_data:/backup/portainer-data-backup:ro
+      # htpc
+      - server_htpc_prowlarr_config:/backup/prowlarr-data-backup:ro
+      - server_htpc_sonarr_config:/backup/sonarr-data-backup:ro
+      - server_htpc_radarr_config:/backup/radarr-data-backup:ro
+      - server_htpc_plex_config:/backup/plex-data-backup:ro
+
       # -- path to local backup (destination)
       - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive
     restart: unless-stopped
