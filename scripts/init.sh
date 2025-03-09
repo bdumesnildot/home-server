@@ -20,6 +20,8 @@ VOLUMES=(
   "server_htpc_prowlarr_config"
   "server_htpc_sonarr_config"
   "server_htpc_radarr_config"
+  "server_htpc_overseerr_config"
+  "server_htpc_doplarr_config"
   "server_htpc_plex_config"
   "server_metrics_grafana_data"
   "server_metrics_grafana_provisioning"

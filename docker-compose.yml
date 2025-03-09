@@ -56,6 +56,10 @@ volumes:
     external: true
   server_htpc_radarr_config:
     external: true
+  server_htpc_overseerr_config:
+    external: true
+  server_htpc_doplarr_config:
+    external: true
   server_htpc_plex_config:
     external: true
   # -- metrics

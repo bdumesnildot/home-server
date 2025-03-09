@@ -26,6 +26,8 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Prowlarr](https://prowlarr.com/)**: Indexer management for Usenet and torrents.
 - **[Sonarr](https://sonarr.tv/)**: Automated TV series management.
 - **[Radarr](https://radarr.video/)**: Automated movie management.
+- **[Overseerr](https://overseerr.dev/)**: Request management and media discovery tool built to work with your existing Plex ecosystem.
+- **[Doplarr](https://github.com/kiranshila/Doplarr)**: Discord bot using / command to send requests to overseer or radarr/sonarr.
 
 
 ### DOWNLOADER 📥

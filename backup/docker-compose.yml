@@ -37,6 +37,8 @@ volumes:
     external: true
   server_htpc_radarr_config:
     external: true
+  server_htpc_overseerr_config:
+    external: true
   server_htpc_plex_config:
     external: true
   # -- metrics
@@ -95,6 +97,7 @@ services:
       - server_htpc_prowlarr_config:/backup/prowlarr-data-backup:ro
       - server_htpc_sonarr_config:/backup/sonarr-data-backup:ro
       - server_htpc_radarr_config:/backup/radarr-data-backup:ro
+      - server_htpc_overseerr_config:/backup/overseerr-data-backup:ro
       - server_htpc_plex_config:/backup/plex-data-backup:ro
       # metrics
       - server_metrics_grafana_data:/backup/grafana-data-backup:ro

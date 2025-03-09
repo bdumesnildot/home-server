@@ -7,6 +7,10 @@ volumes:
     external: true
   server_htpc_radarr_config:
     external: true
+  server_htpc_overseerr_config:
+    external: true
+  server_htpc_doplarr_config:
+    external: true
   server_htpc_plex_config:
     external: true
   server_htpc_plex_transcode:
@@ -17,6 +21,7 @@ networks:
   metrics:
     external: true
   prowlarr:
+  doplarr_requests:
 
 services:
   # ----------------------------------------
@@ -87,6 +92,7 @@ services:
       PGID: ${PGID}
     networks:
       - traefik_proxy
+      - doplarr_requests
     ports:
       - ${SONARR_PORT}:8989
     volumes:
@@ -96,6 +102,7 @@ services:
     labels:
       # -- traefik
       traefik.enable: true
+      traefik.docker.network: traefik_proxy
       traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN}`)
       traefik.http.routers.sonarr.entrypoints: websecure
       traefik.http.routers.sonarr.tls.certresolver: myresolver
@@ -118,6 +125,7 @@ services:
       PGID: ${PGID}
     networks:
       - traefik_proxy
+      - doplarr_requests
     ports:
       - ${RADARR_PORT}:7878
     volumes:
@@ -127,12 +135,74 @@ services:
     labels:
       # -- traefik
       traefik.enable: true
+      traefik.docker.network: traefik_proxy
       traefik.http.routers.radarr.rule: Host(`radarr.${DOMAIN}`)
       traefik.http.routers.radarr.entrypoints: websecure
       traefik.http.routers.radarr.tls.certresolver: myresolver
       traefik.http.routers.radarr.middlewares: authentik-auth
       # -- backup
       docker-volume-backup.stop-during-backup: radarr-service
+    restart: unless-stopped
+
+
+  # ----------------------------------------
+  # OVERSEER
+  # Request management and media discovery tool 
+  # ----------------------------------------
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - traefik_proxy
+      - doplarr_requests
+    ports:
+      - ${OVERSEERR_PORT}:5055
+    volumes:
+      - server_htpc_overseerr_config:/config
+    labels:
+      # -- traefik
+      traefik.enable: true
+      traefik.docker.network: traefik_proxy
+      traefik.http.routers.overseerr.rule: Host(`overseerr.${DOMAIN}`)
+      traefik.http.routers.overseerr.entrypoints: websecure
+      traefik.http.routers.overseerr.tls.certresolver: myresolver
+      traefik.http.routers.overseerr.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: overseerr-service
+    restart: unless-stopped
+
+
+  # ----------------------------------------
+  # DOPLARR
+  # arrStack request bot for Discord
+  # ----------------------------------------
+  doplarr:
+    image: lscr.io/linuxserver/doplarr:latest
+    container_name: doplarr
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+
+      DISCORD__TOKEN: ${DOPLAR_DISCORD_TOKEN}
+      DISCORD__MAX_RESULTS: 25
+      DISCORD__REQUESTED_MSG_STYLE: :plain
+
+      OVERSEERR__URL: http://overseerr:${OVERSEERR_PORT}
+      OVERSEERR__API: ${DOPLAR_OVERSEERR_API_KEY}
+
+      LOG_LEVEL: :info
+      PARTIAL_SEASONS: true #optional
+    networks:
+      - doplarr_requests
+    volumes:
+      - server_htpc_doplarr_config:/config
+    # labels:
+    #   docker-volume-backup.stop-during-backup: doplarr-service
     restart: unless-stopped
 
 
