@@ -1,0 +1,42 @@
+# STORAGE
+
+volumes:
+  server_storage_filebrowser_db:
+    external: true
+
+networks:
+  traefik_proxy:
+    external: true
+
+
+services:
+  # ----------------------------------------
+  # FILE BROWSER
+  # File managing interface
+  # ----------------------------------------
+  filebrowser:
+    image: 'filebrowser/filebrowser'
+    container_name: filebrowser
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - traefik_proxy
+    ports:
+      - ${FILEBROWSER_PORT}:80
+    volumes:
+      - server_storage_filebrowser_db:/database
+      - ./filebrowser/.filebrowser.json:/.filebrowser.json
+      # -- root path
+      - ${STORAGE_PATH}:/srv
+    labels:
+      # -- traefik
+      traefik.enable: true
+      traefik.http.routers.filebrowser.rule: Host(`filebrowser.${DOMAIN}`)
+      traefik.http.routers.filebrowser.entrypoints: websecure
+      traefik.http.routers.filebrowser.tls.certresolver: myresolver
+      traefik.http.routers.filebrowser.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: filebrowser-service
+    restart: unless-stopped
+

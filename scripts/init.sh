@@ -26,6 +26,7 @@ VOLUMES=(
   "server_metrics_grafana_data"
   "server_metrics_grafana_provisioning"
   "server_metrics_prometheus_data"
+  "server_storage_filebrowser_db"
   "server_traefik_letsencrypt"
 )
 

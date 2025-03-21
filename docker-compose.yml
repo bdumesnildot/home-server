@@ -69,6 +69,9 @@ volumes:
     external: true
   server_metrics_prometheus_data:
     external: true
+  # -- storage
+  server_storage_filebrowser_db:
+    external: true
   # -- traefik
   server_traefik_letsencrypt:
     external: true
@@ -92,4 +95,5 @@ include:
 - ./downloader/docker-compose.yml
 - ./htpc/docker-compose.yml
 - ./metrics/docker-compose.yml
+- ./storage/docker-compose.yml
 - ./traefik/docker-compose.yml

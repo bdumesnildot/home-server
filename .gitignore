@@ -8,6 +8,7 @@
 !/downloader/.env
 !/htpc/.env
 !/metrics/.env
+!/storage/.env
 !/traefik/.env
 
 # -- LOCAL SETTINGS

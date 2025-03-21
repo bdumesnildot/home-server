@@ -48,6 +48,9 @@ volumes:
     external: true
   server_metrics_prometheus_data:
     external: true
+  # -- storage
+  server_storage_filebrowser_db:
+    external: true
 
 networks:
   traefik_proxy:
@@ -103,6 +106,8 @@ services:
       - server_metrics_grafana_data:/backup/grafana-data-backup:ro
       - server_metrics_grafana_provisioning:/backup/grafana-provisioning-data-backup:ro
       - server_metrics_prometheus_data:/backup/prometheus-data-backup:ro
+      # metrics
+      - server_storage_filebrowser_db:/backup/filebrowser-data-backup:ro
 
       # -- path to local backup (destination)
       - ${LOCAL_BACKUPS_PATH}/docker-volume-backup:/archive
