@@ -19,6 +19,18 @@ volumes:
     external: true
   server_arcade_emulatorjs_data:
     external: true
+  server_arcade_romm_library:
+    external: true
+  server_arcade_romm_resources:
+    external: true
+  server_arcade_romm_config:
+    external: true
+  server_arcade_romm_logs:
+    external: true
+  server_arcade_romm_assets:
+    external: true
+  server_arcade_romm_db:
+    external: true
   # -- auth
   server_auth_authentik_postgresql:
     external: true

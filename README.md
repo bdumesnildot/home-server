@@ -39,6 +39,7 @@ This home server setup provides a collection of self-hosted services for media s
 
 ### ARCADE 🕹️
 
+- **[RomM](https://github.com/rommapp/romm)**: RomM (ROM Manager) allows you to scan, enrich, browse and play your game collection with a clean and responsive interface.
 - **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
 
 

@@ -5,8 +5,21 @@ volumes:
     external: true
   server_arcade_emulatorjs_data:
     external: true
+  server_arcade_romm_library:
+    external: true
+  server_arcade_romm_resources:
+    external: true
+  server_arcade_romm_config:
+    external: true
+  server_arcade_romm_logs:
+    external: true
+  server_arcade_romm_assets:
+    external: true
+  server_arcade_romm_db:
+    external: true
 
 networks:
+  romm_db:
   traefik_proxy:
     external: true
 
@@ -38,14 +51,14 @@ services:
       traefik.http.services.svc-emulatorjs-manager.loadbalancer.server.port: 3000
 
       traefik.http.routers.emulatorjs.service: svc-emulatorjs
-      traefik.http.routers.emulatorjs.rule: Host(`arcade.${DOMAIN}`)
+      traefik.http.routers.emulatorjs.rule: Host(`emulatorjs.${DOMAIN}`)
       traefik.http.routers.emulatorjs.entrypoints: websecure
       traefik.http.routers.emulatorjs.tls.certresolver: myresolver
       traefik.http.routers.emulatorjs.middlewares: authentik-auth
 
 
       traefik.http.routers.emulatorjs-manager.service: svc-emulatorjs-manager
-      traefik.http.routers.emulatorjs-manager.rule: Host(`arcade-manager.${DOMAIN}`)
+      traefik.http.routers.emulatorjs-manager.rule: Host(`emulatorjs-manager.${DOMAIN}`)
       traefik.http.routers.emulatorjs-manager.entrypoints: websecure
       traefik.http.routers.emulatorjs-manager.tls.certresolver: myresolver
       traefik.http.routers.emulatorjs-manager.middlewares: authentik-auth
@@ -53,4 +66,76 @@ services:
       # -- backup
       docker-volume-backup.stop-during-backup: emulatorjs-service
 
+    restart: unless-stopped
+
+
+  # ----------------------------------------
+  # ROMM
+  # Retro gaming
+  # ----------------------------------------
+  romm:
+    image: docker.io/rommapp/romm:latest
+    container_name: romm
+    environment:
+      TZ: ${TZ}
+
+      DB_HOST: romm_db
+      DB_PORT: ${ROMM_DB_PORT}
+      DB_NAME: ${ROMM_DB_NAME}
+      DB_USER: ${ROMM_DB_USER}
+      DB_PASSWD: ${ROMM_DB_PASSWD}
+
+      IGDB_CLIENT_ID: ${ROMM_IGDB_CLIENT_ID}
+      IGDB_CLIENT_SECRET: ${ROMM_IGDB_CLIENT_SECRET}
+
+      ROMM_AUTH_USERNAME: ${ROMM_AUTH_USERNAME}
+      ROMM_AUTH_PASSWORD: ${ROMM_AUTH_PASSWORD}
+      ROMM_AUTH_SECRET_KEY: ${ROMM_AUTH_SECRET_KEY}
+    networks:
+      - traefik_proxy
+      - romm_db
+    ports:
+      - ${ROMM_APP_PORT}:8080
+    volumes:
+      - server_arcade_romm_library:/romm/library
+      - server_arcade_romm_resources:/romm/resources
+      - server_arcade_romm_config:/romm/config
+      - server_arcade_romm_logs:/romm/logs
+      - server_arcade_romm_assets:/romm/assets
+    labels:
+      # -- traefik
+      traefik.enable: true
+      traefik.docker.network: traefik_proxy
+      traefik.http.routers.romm.rule: Host(`arcade.${DOMAIN}`)
+      traefik.http.services.romm.loadbalancer.server.port: 8080
+      traefik.http.routers.romm.entrypoints: websecure
+      traefik.http.routers.romm.tls.certresolver: myresolver
+      traefik.http.routers.romm.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: romm-service
+    depends_on:
+      - romm_db
+    restart: unless-stopped
+
+
+  # ----------------------------------------
+  # ROMM DATABASE
+  # Retro gaming
+  # ----------------------------------------
+  romm_db:
+    image: mariadb
+    container_name: romm-db
+    user: root
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${ROMM_DB_ROOT_PASSWORD}
+      MYSQL_USER: ${ROMM_DB_USER}
+      MYSQL_PASSWORD: ${ROMM_DB_PASSWD}
+      MYSQL_DATABASE: ${ROMM_DB_NAME}
+    networks:
+      - romm_db
+    ports:
+      - ${ROMM_DB_PORT}:3306
+    volumes:
+      - server_arcade_romm_db:/var/lib/mysql
     restart: unless-stopped
