@@ -20,7 +20,7 @@ services:
   traefik:
     image: traefik:v3.3.3
     container_name: traefik
-    user: ${PUID}:${PGID}
+    user: root
     environment:
       DOMAIN: ${DOMAIN}
       CF_DNS_API_TOKEN: ${CLOUDFLARE_DNS_API_TOKEN}

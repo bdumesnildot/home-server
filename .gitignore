@@ -19,3 +19,6 @@
 docker/volumes/*
 !docker/volumes/.keep
 
+# -- Scripts
+scripts/volumes-management.sh
+

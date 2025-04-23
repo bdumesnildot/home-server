@@ -90,9 +90,9 @@ services:
   # AUTHENTIK SERVER
   # ----------------------
   authentik_server:
-    image: ghcr.io/goauthentik/server:2025.2.2
+    image: ghcr.io/goauthentik/server:2025.2.4
     container_name: authentik-server
-    user: ${PUID}:${PGID}
+    user: root
     environment:
       AUTHENTIK_REDIS__HOST: authentik_redis
       AUTHENTIK_POSTGRESQL__HOST: authentik_postgresql
@@ -150,7 +150,7 @@ services:
   # AUTHENTIK WORKER
   # ----------------------
   authentik_worker:
-    image: ghcr.io/goauthentik/server:2025.2.2
+    image: ghcr.io/goauthentik/server:2025.2.4
     container_name: authentik-worker
     user: root
     environment:

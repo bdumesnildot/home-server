@@ -34,10 +34,9 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
     networks:
       - traefik_proxy
       - prowlarr
@@ -86,10 +85,9 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
     networks:
       - traefik_proxy
       - doplarr_requests
@@ -119,10 +117,9 @@ services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
     networks:
       - traefik_proxy
       - doplarr_requests
@@ -152,10 +149,9 @@ services:
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
     networks:
       - traefik_proxy
       - doplarr_requests
@@ -183,10 +179,9 @@ services:
   doplarr:
     image: lscr.io/linuxserver/doplarr:latest
     container_name: doplarr
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
 
       DISCORD__TOKEN: ${DOPLAR_DISCORD_TOKEN}
       DISCORD__MAX_RESULTS: 25
