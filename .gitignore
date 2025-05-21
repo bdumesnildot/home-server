@@ -1,11 +1,11 @@
 # -- ENVIRONMENT
 .env
 # sym link
-!/arcade/.env
 !/auth/.env
 !/backup/.env
 !/docker/.env
 !/downloader/.env
+!/games/.env
 !/htpc/.env
 !/metrics/.env
 !/storage/.env

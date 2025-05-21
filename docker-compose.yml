@@ -100,11 +100,11 @@ networks:
     external: true
 
 include:
-- ./arcade/docker-compose.yml
 - ./auth/docker-compose.yml
 - ./backup/docker-compose.yml
 - ./docker/docker-compose.yml
 - ./downloader/docker-compose.yml
+- ./games/docker-compose.yml
 - ./htpc/docker-compose.yml
 - ./metrics/docker-compose.yml
 - ./storage/docker-compose.yml

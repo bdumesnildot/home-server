@@ -80,9 +80,6 @@ services:
       - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
 
       # -- services volumes to backup (sources)
-      # arcade
-      - server_arcade_emulatorjs_config:/backup/emulatorjs-config-data-backup:ro
-      - server_arcade_emulatorjs_data:/backup/emulatorjs-data-backup:ro
       # auth
       - server_auth_authentik_postgresql_dumps:/backup/authentik-postgresql-data-backup:ro
       - server_auth_authentik_redis_dumps:/backup/authentik-redis-data-backup:ro
@@ -96,6 +93,9 @@ services:
       # downloader
       - server_downloader_qbittorrent_config:/backup/qbittorrent-data-backup:ro
       - server_downloader_nzbget_config:/backup/nzbget-data-backup:ro
+      # games
+      - server_arcade_emulatorjs_config:/backup/emulatorjs-config-data-backup:ro
+      - server_arcade_emulatorjs_data:/backup/emulatorjs-data-backup:ro
       # htpc
       - server_htpc_prowlarr_config:/backup/prowlarr-data-backup:ro
       - server_htpc_sonarr_config:/backup/sonarr-data-backup:ro
