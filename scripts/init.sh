@@ -34,6 +34,8 @@ VOLUMES=(
   "server_metrics_prometheus_data"
   "server_storage_filebrowser_db"
   "server_traefik_letsencrypt"
+  "server_apps_obsidian_config"
+  "server_apps_obsidian_vaults"
 )
 
 # Define networks

@@ -1,0 +1,41 @@
+# APPS
+
+volumes:
+  server_apps_obsidian_config:
+    external: true
+networks:
+  traefik_proxy:
+    external: true
+
+services:
+  # ----------------------------------------
+  # OBSIDIAN
+  # A second brain, for you, forever
+  # ----------------------------------------
+  obsidian:
+    image: lscr.io/linuxserver/obsidian:latest
+    container_name: obsidian
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    networks:
+      - traefik_proxy
+    ports:
+      - ${OBSIDIAN_PORT}:3000
+    volumes:
+      - server_apps_obsidian_config:/config
+    labels:
+      # -- traefik
+      traefik.enable: true
+      traefik.http.routers.obsidian.rule: Host(`obsidian.${DOMAIN}`)
+      traefik.http.services.obsidian.loadbalancer.server.port: 3000
+      traefik.http.routers.obsidian.entrypoints: websecure
+      traefik.http.routers.obsidian.tls.certresolver: myresolver
+      traefik.http.routers.obsidian.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: obsidian-service
+    security_opt:
+      - seccomp:unconfined
+    shm_size: "1gb"
+    restart: unless-stopped

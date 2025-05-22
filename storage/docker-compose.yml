@@ -27,7 +27,7 @@ services:
     volumes:
       - server_storage_filebrowser_db:/database
       - ./filebrowser/.filebrowser.json:/.filebrowser.json
-      # -- root path
+      - ./filebrowser/branding:/branding
       - ${STORAGE_PATH}:/srv
     labels:
       # -- traefik

@@ -1,6 +1,7 @@
 # -- ENVIRONMENT
 .env
 # sym link
+!/apps/.env
 !/auth/.env
 !/backup/.env
 !/docker/.env
