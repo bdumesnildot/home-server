@@ -23,6 +23,7 @@ This home server setup provides a collection of self-hosted services for media s
 ### HTPC 🎬
 
 - **[Plex Media Server](https://www.plex.tv/)**: Manage and serve media files to Plex clients.
+- **[Jellyfin Media Server](https://jellyfin.org/)**: Volunteer-built media solution that puts you in control of your media.
 - **[Prowlarr](https://prowlarr.com/)**: Indexer management for Usenet and torrents.
 - **[Sonarr](https://sonarr.tv/)**: Automated TV series management.
 - **[Radarr](https://radarr.video/)**: Automated movie management.

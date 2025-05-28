@@ -77,6 +77,8 @@ volumes:
     external: true
   server_htpc_plex_config:
     external: true
+  server_htpc_jellyfin_config:
+    external: true
   # -- metrics
   server_metrics_grafana_data:
     external: true

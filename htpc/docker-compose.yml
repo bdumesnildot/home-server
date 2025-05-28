@@ -13,6 +13,8 @@ volumes:
     external: true
   server_htpc_plex_config:
     external: true
+  server_htpc_jellyfin_config:
+    external: true
   server_htpc_plex_transcode:
 
 networks:
@@ -75,6 +77,17 @@ services:
     ports:
       - ${PROWLARR_FLARESOLVER_PORT}:8191
       - ${PROWLARR_FLARESOLVER_PROMETHEUS_PORT}:8191
+    restart: unless-stopped
+
+
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    networks:
+      - prowlarr
+    ports:
+      - ${PROWLARR_BYPARR_PORT}:8191
+    shm_size: 2gb
     restart: unless-stopped
 
 
@@ -220,7 +233,7 @@ services:
       - ${PLEX_PORT}:32400/tcp
       - 8324:8324/tcp
       - 32469:32469/tcp
-      - 1900:1900/udp
+      # - 1900:1900/udp // for DLNA, used by Jellyfin
       - 32410:32410/udp
       - 32412:32412/udp
       - 32413:32413/udp
@@ -241,4 +254,39 @@ services:
       traefik.http.routers.plex.middlewares: authentik-auth
       # -- backup
       docker-volume-backup.stop-during-backup: plex-service
+    restart: unless-stopped
+
+
+  # ----------------------------------------
+  # JELLYFIN
+  # An alternative to Plex
+  # ----------------------------------------
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      JELLYFIN_PublishedServerUrl: https://jellyfin.${DOMAIN}
+    networks:
+      - traefik_proxy
+    ports:
+      - ${JELLYFIN_PORT}:8096
+      - 7359:7359/udp
+      - 1900:1900/udp
+    volumes:
+      - server_htpc_jellyfin_config:/config
+      - ${MEDIA_PATH}/media/series:/data/tvshows
+      - ${MEDIA_PATH}/media/movies:/data/movies
+    labels:
+      # -- traefik
+      traefik.enable: true
+      traefik.http.routers.jellyfin.rule: Host(`jellyfin.${DOMAIN}`)
+      traefik.http.routers.jellyfin.entrypoints: websecure
+      traefik.http.routers.jellyfin.tls.certresolver: myresolver
+      traefik.http.services.jellyfin.loadbalancer.server.port: 8096
+      traefik.http.routers.jellyfin.middlewares: authentik-auth
+      # -- backup
+      docker-volume-backup.stop-during-backup: jellyfin-service
     restart: unless-stopped

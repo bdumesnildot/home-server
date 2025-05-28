@@ -41,6 +41,8 @@ volumes:
     external: true
   server_htpc_plex_config:
     external: true
+  server_htpc_jellyfin_config:
+    external: true
   # -- metrics
   server_metrics_grafana_data:
     external: true
@@ -102,6 +104,7 @@ services:
       - server_htpc_radarr_config:/backup/radarr-data-backup:ro
       - server_htpc_overseerr_config:/backup/overseerr-data-backup:ro
       - server_htpc_plex_config:/backup/plex-data-backup:ro
+      - server_htpc_jellyfin_config:/backup/jellyfin-data-backup:ro
       # metrics
       - server_metrics_grafana_data:/backup/grafana-data-backup:ro
       - server_metrics_grafana_provisioning:/backup/grafana-provisioning-data-backup:ro

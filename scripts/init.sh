@@ -29,6 +29,7 @@ VOLUMES=(
   "server_htpc_overseerr_config"
   "server_htpc_doplarr_config"
   "server_htpc_plex_config"
+  "server_htpc_jellyfin_config"
   "server_metrics_grafana_data"
   "server_metrics_grafana_provisioning"
   "server_metrics_prometheus_data"
