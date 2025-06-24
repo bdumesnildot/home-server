@@ -15,7 +15,9 @@
 
 volumes:
   # -- apps
-  server_apps_obsidian_config:
+  server_apps_n8n_data:
+    external: true
+  server_apps_n8n_files:
     external: true
   # -- auth
   server_auth_authentik_postgresql:

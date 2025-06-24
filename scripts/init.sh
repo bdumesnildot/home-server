@@ -2,14 +2,14 @@
 
 # Define volumes
 VOLUMES=(
-  "server_arcade_emulatorjs_config"
-  "server_arcade_emulatorjs_data"
   "server_arcade_romm_library"
   "server_arcade_romm_resources"
   "server_arcade_romm_config"
   "server_arcade_romm_logs"
   "server_arcade_romm_assets"
   "server_arcade_romm_db"
+  "server_apps_n8n_data"
+  "server_apps_n8n_files"
   "server_auth_authentik_postgresql"
   "server_auth_authentik_postgresql_dumps"
   "server_auth_authentik_redis"

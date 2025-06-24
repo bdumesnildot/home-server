@@ -20,6 +20,11 @@ This home server setup provides a collection of self-hosted services for media s
 - **[Authentik](https://goauthentik.io/)**: IdP (Identity Provider) and SSO (single sign on)
 
 
+### APPS 🖥️
+
+- **[n8n](https://docs.n8n.io)**: A workflow automation tool that allows you to connect various services and automate tasks.
+
+
 ### HTPC 🎬
 
 - **[Plex Media Server](https://www.plex.tv/)**: Manage and serve media files to Plex clients.
@@ -38,10 +43,9 @@ This home server setup provides a collection of self-hosted services for media s
 - **[NZBget](https://nzbget.net/)**: Usenet downloader for managing and downloading Usenet content.
 
 
-### GAMES 🕹️
+### GAMING 🕹️
 
 - **[RomM](https://github.com/rommapp/romm)**: RomM (ROM Manager) allows you to scan, enrich, browse and play your game collection with a clean and responsive interface.
-- **[EmulatorJs](https://emulatorjs.org/)**: Embed emulator, runs RetroArch compiled to webassembly, optimized for running in the web browser.
 
 
 ### BACKUP 🛟

@@ -1,7 +1,9 @@
 # APPS
 
 volumes:
-  server_apps_obsidian_config:
+  server_apps_n8n_data:
+    external: true
+  server_apps_n8n_files:
     external: true
 networks:
   traefik_proxy:
@@ -9,33 +11,42 @@ networks:
 
 services:
   # ----------------------------------------
-  # OBSIDIAN
-  # A second brain, for you, forever
+  # N8N
+  # Workflow automation tool
   # ----------------------------------------
-  obsidian:
-    image: lscr.io/linuxserver/obsidian:latest
-    container_name: obsidian
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
     environment:
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
+      GENERIC_TIMEZONE: ${TZ}
+      N8N_HOST: n8n.${DOMAIN}
+      WEBHOOK_URL: https://n8n.${DOMAIN}/
+      N8N_PORT: 5678
+      N8N_PROTOCOL: https
+      NODE_ENV: production
     networks:
       - traefik_proxy
     ports:
-      - ${OBSIDIAN_PORT}:3000
+      - ${N8N_PORT}:5678
     volumes:
-      - server_apps_obsidian_config:/config
+      - server_apps_n8n_data:/home/node/.n8n
+      - server_apps_n8n_files:/files
     labels:
       # -- traefik
       traefik.enable: true
-      traefik.http.routers.obsidian.rule: Host(`obsidian.${DOMAIN}`)
-      traefik.http.services.obsidian.loadbalancer.server.port: 3000
-      traefik.http.routers.obsidian.entrypoints: websecure
-      traefik.http.routers.obsidian.tls.certresolver: myresolver
-      traefik.http.routers.obsidian.middlewares: authentik-auth
+      traefik.http.routers.n8n.rule: Host(`n8n.${DOMAIN}`)
+      traefik.http.routers.n8n.entrypoints: websecure
+      traefik.http.routers.n8n.tls.certresolver: myresolver
+      traefik.http.routers.n8n.middlewares: authentik-auth
+      traefik.http.middlewares.n8n.headers.SSLRedirect: true
+      traefik.http.middlewares.n8n.headers.STSSeconds: 315360000
+      traefik.http.middlewares.n8n.headers.browserXSSFilter: true
+      traefik.http.middlewares.n8n.headers.contentTypeNosniff: true
+      traefik.http.middlewares.n8n.headers.forceSTSHeader: true
+      traefik.http.middlewares.n8n.headers.SSLHost: ${DOMAIN}
+      traefik.http.middlewares.n8n.headers.STSIncludeSubdomains: true
+      traefik.http.middlewares.n8n.headers.STSPreload: true
+      # traefik.http.routers.n8n.middlewares: n8n@docker
       # -- backup
-      docker-volume-backup.stop-during-backup: obsidian-service
-    security_opt:
-      - seccomp:unconfined
-    shm_size: "1gb"
+      docker-volume-backup.stop-during-backup: n8n-service
     restart: unless-stopped

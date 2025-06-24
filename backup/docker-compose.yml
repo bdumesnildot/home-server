@@ -88,6 +88,9 @@ services:
       - ./backup-volume-docker:/etc/dockervolumebackup/conf.d
 
       # -- services volumes to backup (sources)
+      # apps
+      - server_apps_n8n_data:/backup/apps-n8n-data-backup:ro
+      - server_apps_n8n_files:/backup/apps-n8n-files-backup:ro
       # auth
       - server_auth_authentik_postgresql_dumps:/backup/authentik-postgresql-data-backup:ro
       - server_auth_authentik_redis_dumps:/backup/authentik-redis-data-backup:ro
