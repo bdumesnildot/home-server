@@ -1,11 +1,6 @@
 # BACKUP
 
 volumes:
-  # -- arcade
-  server_arcade_emulatorjs_config:
-    external: true
-  server_arcade_emulatorjs_data:
-    external: true
   # -- auth
   server_auth_authentik_postgresql_dumps:
     external: true
@@ -29,6 +24,17 @@ volumes:
   server_downloader_qbittorrent_config:
     external: true
   server_downloader_nzbget_config:
+    external: true
+  # -- gaming
+  server_arcade_romm_library:
+    external: true
+  server_arcade_romm_resources:
+    external: true
+  server_arcade_romm_config:
+    external: true
+  server_arcade_romm_logs:
+    external: true
+  server_arcade_romm_db:
     external: true
   # -- htpc
   server_htpc_prowlarr_config:
@@ -95,9 +101,11 @@ services:
       # downloader
       - server_downloader_qbittorrent_config:/backup/qbittorrent-data-backup:ro
       - server_downloader_nzbget_config:/backup/nzbget-data-backup:ro
-      # games
-      - server_arcade_emulatorjs_config:/backup/emulatorjs-config-data-backup:ro
-      - server_arcade_emulatorjs_data:/backup/emulatorjs-data-backup:ro
+      # gaming
+      - server_arcade_romm_library:/backup/gaming-romm-library-backup:ro
+      - server_arcade_romm_resources:/backup/gaming-romm-ressources-backup:ro
+      - server_arcade_romm_config:/backup/gaming-romm-config-backup:ro
+      - server_arcade_romm_db:/backup/gaming-romm-db-backup:ro
       # htpc
       - server_htpc_prowlarr_config:/backup/prowlarr-data-backup:ro
       - server_htpc_sonarr_config:/backup/sonarr-data-backup:ro
