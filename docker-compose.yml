@@ -110,7 +110,7 @@ include:
 - ./backup/docker-compose.yml
 - ./docker/docker-compose.yml
 - ./downloader/docker-compose.yml
-- ./games/docker-compose.yml
+- ./gaming/docker-compose.yml
 - ./htpc/docker-compose.yml
 - ./metrics/docker-compose.yml
 - ./storage/docker-compose.yml
