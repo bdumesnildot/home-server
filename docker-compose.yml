@@ -19,6 +19,13 @@ volumes:
     external: true
   server_apps_n8n_files:
     external: true
+  server_apps_n8n_postgres_data:
+    external: true
+  server_apps_n8n_postgres_dumps:
+    external: true
+  server_apps_n8n_qdrant_data:
+    external: true
+
   # -- auth
   server_auth_authentik_postgresql:
     external: true

@@ -10,6 +10,9 @@ VOLUMES=(
   "server_arcade_romm_db"
   "server_apps_n8n_data"
   "server_apps_n8n_files"
+  "server_apps_n8n_postgres_data"
+  "server_apps_n8n_postgres_dumps"
+  "server_apps_n8n_qdrant_data"
   "server_auth_authentik_postgresql"
   "server_auth_authentik_postgresql_dumps"
   "server_auth_authentik_redis"
@@ -44,6 +47,7 @@ NETWORKS=(
   "traefik_proxy"
   "socket_proxy"
   "metrics"
+  "n8n_internal"
 )
 
 # Create Docker volumes if they do not exist
