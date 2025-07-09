@@ -90,7 +90,7 @@ services:
   # AUTHENTIK SERVER
   # ----------------------
   authentik_server:
-    image: ghcr.io/goauthentik/server:2025.4.1
+    image: ghcr.io/goauthentik/server:2025.6.3
     container_name: authentik-server
     user: root
     environment:
@@ -150,7 +150,7 @@ services:
   # AUTHENTIK WORKER
   # ----------------------
   authentik_worker:
-    image: ghcr.io/goauthentik/server:2025.4.1
+    image: ghcr.io/goauthentik/server:2025.6.3
     container_name: authentik-worker
     user: root
     environment:
